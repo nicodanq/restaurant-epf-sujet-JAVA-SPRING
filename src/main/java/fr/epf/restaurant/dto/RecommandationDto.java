@@ -6,7 +6,8 @@ public class RecommandationDto {
     private double prixUnitaire;
     private double quantiteRecommandee;
 
-    public RecommandationDto(long fournisseurId, String fournisseurNom, double prixUnitaire, double quantiteRecommandee) {
+    public RecommandationDto(long fournisseurId, String fournisseurNom,
+            double prixUnitaire, double quantiteRecommandee) {
         this.fournisseurId = fournisseurId;
         this.fournisseurNom = fournisseurNom;
         this.prixUnitaire = prixUnitaire;
