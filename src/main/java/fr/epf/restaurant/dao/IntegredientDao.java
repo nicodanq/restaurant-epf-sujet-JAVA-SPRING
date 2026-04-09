@@ -12,6 +12,11 @@ public class IntegredientDao {
 
     private static final String FIND_ALL_QUERY =
         "SELECT id, nom, unite, stock_actuel, seuil_alerte FROM INGREDIENT";
+    private static final String FIND_BY_ID_QUERY =
+        "SELECT id, nom, unite, stock_actuel, seuil_alerte FROM INGREDIENT WHERE id = ?";
+    private static final String FIND_SOUS_ALERTE_QUERY =
+        "SELECT id, nom, unite, stock_actuel, seuil_alerte FROM INGREDIENT"
+        + " WHERE stock_actuel < seuil_alerte";
 
     private final JdbcTemplate jdbc;
 
@@ -29,5 +34,13 @@ public class IntegredientDao {
 
     public List<Ingredient> findAll() {
         return jdbc.query(FIND_ALL_QUERY, ingredientMapper);
+    }
+
+    public Ingredient findById(Long id) {
+        return jdbc.queryForObject(FIND_BY_ID_QUERY, ingredientMapper, id);
+    }
+
+    public List<Ingredient> findSousAlerte() {
+        return jdbc.query(FIND_SOUS_ALERTE_QUERY, ingredientMapper);
     }
 }
