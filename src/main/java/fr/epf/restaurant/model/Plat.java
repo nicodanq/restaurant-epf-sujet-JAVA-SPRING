@@ -9,6 +9,8 @@ public class Plat {
     private double prix;
     private List<PlatIngredient> ingredients;
 
+    public Plat() {}
+
     public Plat(long id, String nom, String description, double prix) {
         this.id = id;
         this.nom = nom;
