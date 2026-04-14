@@ -30,4 +30,13 @@ public class ClientDao {
     public List<Client> findAll() {
         return jdbc.query(FIND_ALL_QUERY, responseMapper);
     }
+
+    public Client findById(Long id) {
+        return jdbc.queryForObject(FIND_BY_ID_QUERY, responseMapper, id);
+    }
+
+    public void create(Client client) {
+        jdbc.update(CREATE_QUERY, client.getNom(), client.getPrenom(),
+            client.getEmail(), client.getTelephone());
+    }
 }

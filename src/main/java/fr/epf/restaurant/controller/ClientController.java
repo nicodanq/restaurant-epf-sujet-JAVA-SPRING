@@ -1,8 +1,12 @@
 package fr.epf.restaurant.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 import fr.epf.restaurant.dao.ClientDao;
 import fr.epf.restaurant.model.Client;
@@ -22,4 +26,13 @@ public class ClientController {
         return clientDao.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Client findById(@PathVariable Long id) {
+        return clientDao.findById(id);
+    }
+
+    @PostMapping
+    public void create(@RequestBody Client client) {
+        clientDao.create(client);
+    }
 }
