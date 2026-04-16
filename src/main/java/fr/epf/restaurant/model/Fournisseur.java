@@ -6,6 +6,8 @@ public class Fournisseur {
     private String contact;
     private String email;
 
+    public Fournisseur() {}
+
     public Fournisseur(long id, String nom, String contact, String email) {
         this.id = id;
         this.nom = nom;
