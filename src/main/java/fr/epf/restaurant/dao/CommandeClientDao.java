@@ -4,13 +4,27 @@ import fr.epf.restaurant.model.Client;
 import fr.epf.restaurant.model.CommandeClient;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
 public class CommandeClientDao {
 
+    private static final String SAVE_QUERY =
+        "INSERT INTO COMMANDE_CLIENT (client_id) VALUES (?)";
+    private static final String ADD_LIGNE_QUERY =
+        "INSERT INTO LIGNE_COMMANDE_CLIENT (commande_client_id, plat_id, quantite)"
+        + " VALUES (?, ?, ?)";
+    private static final String FIND_BY_ID_QUERY =
+        "SELECT cc.id AS commande_id, cc.date_commande, cc.statut, "
+        + "c.id AS client_id, c.nom, c.prenom, c.email, c.telephone "
+        + "FROM COMMANDE_CLIENT cc JOIN CLIENT c ON c.id = cc.client_id"
+        + " WHERE cc.id = ?";
     private static final String FIND_ALL_QUERY =
         "SELECT cc.id AS commande_id, cc.date_commande, cc.statut, "
         + "c.id AS client_id, c.nom, c.prenom, c.email, c.telephone "
@@ -40,5 +54,23 @@ public class CommandeClientDao {
 
     public List<CommandeClient> findAll() {
         return jdbc.query(FIND_ALL_QUERY, commandeClientMapper);
+    }
+
+    public CommandeClient findById(Long id) {
+        return jdbc.queryForObject(FIND_BY_ID_QUERY, commandeClientMapper, id);
+    }
+
+    public Long save(Long clientId) {
+        KeyHolder kh = new GeneratedKeyHolder();
+        jdbc.update(con -> {
+            PreparedStatement ps = con.prepareStatement(SAVE_QUERY, Statement.RETURN_GENERATED_KEYS);
+            ps.setLong(1, clientId);
+            return ps;
+        }, kh);
+        return kh.getKey().longValue();
+    }
+
+    public void addLigne(Long commandeId, Long platId, int quantite) {
+        jdbc.update(ADD_LIGNE_QUERY, commandeId, platId, quantite);
     }
 }
