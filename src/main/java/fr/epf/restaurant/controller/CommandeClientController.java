@@ -35,6 +35,11 @@ public class CommandeClientController {
         return commandeClientDao.findAll();
     }
 
+    @GetMapping("/{id}")
+    public CommandeClient findById(@PathVariable Long id) {
+        return commandeClientDao.findById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommandeClient creer(@RequestBody CreerCommandeClientRequest req) {
