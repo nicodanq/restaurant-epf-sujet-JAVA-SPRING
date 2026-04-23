@@ -45,4 +45,9 @@ public class CommandeClientController {
     public PreparationResultDto preparer(@PathVariable Long id) {
         return commandeClientService.preparer(id);
     }
+
+    @PutMapping("/{id}/servir")
+    public CommandeClient servir(@PathVariable Long id) {
+        return commandeClientService.servir(id);
+    }
 }
