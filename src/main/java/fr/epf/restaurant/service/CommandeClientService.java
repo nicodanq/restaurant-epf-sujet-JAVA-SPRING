@@ -101,4 +101,12 @@ public class CommandeClientService {
         commandeClientDao.updateStatut(id, "SERVIE");
         return commandeClientDao.findById(id);
     }
+
+    public void supprimer(Long id) {
+        CommandeClient commande = commandeClientDao.findById(id);
+        if (commande == null) {
+            throw new ResourceNotFoundException("Commande introuvable : " + id);
+        }
+        commandeClientDao.delete(id);
+    }
 }
