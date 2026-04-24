@@ -29,6 +29,10 @@ public class CommandeClientDao {
         + " WHERE cc.id = ?";
     private static final String UPDATE_STATUT_QUERY =
         "UPDATE COMMANDE_CLIENT SET statut = ? WHERE id = ?";
+    private static final String DELETE_LIGNES_QUERY =
+        "DELETE FROM LIGNE_COMMANDE_CLIENT WHERE commande_client_id = ?";
+    private static final String DELETE_QUERY =
+        "DELETE FROM COMMANDE_CLIENT WHERE id = ?";
     private static final String FIND_LIGNES_QUERY =
         "SELECT lcc.id, lcc.quantite, p.id AS plat_id, p.nom, p.description, p.prix"
         + " FROM LIGNE_COMMANDE_CLIENT lcc JOIN PLAT p ON p.id = lcc.plat_id"
@@ -83,6 +87,11 @@ public class CommandeClientDao {
 
     public void updateStatut(Long id, String statut) {
         jdbc.update(UPDATE_STATUT_QUERY, statut, id);
+    }
+
+    public void delete(Long id) {
+        jdbc.update(DELETE_LIGNES_QUERY, id);
+        jdbc.update(DELETE_QUERY, id);
     }
 
     public List<LigneCommandeClient> findLignesByCommandeId(Long commandeId) {
