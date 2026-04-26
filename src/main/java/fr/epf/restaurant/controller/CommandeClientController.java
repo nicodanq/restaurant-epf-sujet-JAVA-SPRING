@@ -6,6 +6,7 @@ import fr.epf.restaurant.dto.PreparationResultDto;
 import fr.epf.restaurant.model.CommandeClient;
 import fr.epf.restaurant.service.CommandeClientService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,5 +55,11 @@ public class CommandeClientController {
     @PutMapping("/{id}/servir")
     public CommandeClient servir(@PathVariable Long id) {
         return commandeClientService.servir(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void supprimer(@PathVariable Long id) {
+        commandeClientService.supprimer(id);
     }
 }
