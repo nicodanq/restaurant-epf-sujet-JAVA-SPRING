@@ -21,16 +21,16 @@ public class StockService {
     }
 
     public RecommandationDto getRecommandation(Long ingredientId) {
-        Ingredient ing = integredientDao.findById(ingredientId);
-        if (ing == null) {
+        Ingredient ingredient = integredientDao.findById(ingredientId);
+        if (ingredient == null) {
             throw new ResourceNotFoundException("Ingrédient introuvable : " + ingredientId);
         }
 
         Map<String, Object> row = integredientDao.findFournisseurLeMoinsCher(ingredientId)
             .orElseThrow(() -> new ResourceNotFoundException("Aucun fournisseur pour cet ingrédient"));
 
-        double stock = ing.getStockActuel();
-        double seuil = ing.getSeuilAlerte();
+        double stock = ingredient.getStockActuel();
+        double seuil = ingredient.getSeuilAlerte();
         double qte = (seuil > stock) ? 2 * (seuil - stock) : seuil;
 
         return new RecommandationDto(
@@ -43,12 +43,12 @@ public class StockService {
 
     public List<AlerteStockDto> getAlertes() {
         return integredientDao.findSousAlerte().stream()
-            .map(ing -> new AlerteStockDto(
-                ing.getId(),
-                ing.getNom(),
-                ing.getStockActuel(),
-                ing.getSeuilAlerte(),
-                2 * (ing.getSeuilAlerte() - ing.getStockActuel())
+            .map(ingredient -> new AlerteStockDto(
+                ingredient.getId(),
+                ingredient.getNom(),
+                ingredient.getStockActuel(),
+                ingredient.getSeuilAlerte(),
+                2 * (ingredient.getSeuilAlerte() - ingredient.getStockActuel())
             ))
             .collect(Collectors.toList());
     }
