@@ -25,6 +25,7 @@
 Les modèles sont des classes Java qui **représentent les tables** de la BDD. Crée un package `model/`.
 
 ### `model/Client.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -40,6 +41,7 @@ public class Client {
 ```
 
 ### `model/Ingredient.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -55,6 +57,7 @@ public class Ingredient {
 ```
 
 ### `model/Plat.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -72,6 +75,7 @@ public class Plat {
 ```
 
 ### `model/PlatIngredient.java`
+
 > Représente une ligne de la table `PLAT_INGREDIENT` : quantité d'un ingrédient pour 1 portion d'un plat.
 
 ```java
@@ -86,6 +90,7 @@ public class PlatIngredient {
 ```
 
 ### `model/Fournisseur.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -100,6 +105,7 @@ public class Fournisseur {
 ```
 
 ### `model/CommandeClient.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -118,6 +124,7 @@ public class CommandeClient {
 ```
 
 ### `model/LigneCommandeClient.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -131,6 +138,7 @@ public class LigneCommandeClient {
 ```
 
 ### `model/CommandeFournisseur.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -149,6 +157,7 @@ public class CommandeFournisseur {
 ```
 
 ### `model/LigneCommandeFournisseur.java`
+
 ```java
 package fr.epf.restaurant.model;
 
@@ -169,6 +178,7 @@ public class LigneCommandeFournisseur {
 Les DTOs sont dans le package `dto/`. Ce sont des classes simples, sans annotations Spring.
 
 ### `dto/CreerCommandeClientRequest.java`
+
 > Reçu par le controller quand le frontend crée une commande.
 
 ```java
@@ -191,6 +201,7 @@ public class CreerCommandeClientRequest {
 ```
 
 ### `dto/CreerCommandeFournisseurRequest.java`
+
 ```java
 package fr.epf.restaurant.dto;
 
@@ -212,6 +223,7 @@ public class CreerCommandeFournisseurRequest {
 ```
 
 ### `dto/AlerteStockDto.java`
+
 > Envoyé au frontend pour signaler un ingrédient dont le stock est sous le seuil.
 
 ```java
@@ -229,6 +241,7 @@ public class AlerteStockDto {
 ```
 
 ### `dto/RecommandationDto.java`
+
 > Envoyé pour `GET /api/ingredients/{id}/recommandation`.
 
 ```java
@@ -245,6 +258,7 @@ public class RecommandationDto {
 ```
 
 ### `dto/PreparationResultDto.java`
+
 > Résultat de `PUT /api/commandes/client/{id}/preparer` : la commande + les alertes stock éventuelles.
 
 ```java
@@ -268,6 +282,7 @@ public class PreparationResultDto {
 Package `exception/`.
 
 ### `exception/AppException.java`
+
 > Classe de base. Porte le code HTTP pour que le handler puisse l'utiliser.
 
 ```java
@@ -288,6 +303,7 @@ public class AppException extends RuntimeException {
 ```
 
 ### `exception/ResourceNotFoundException.java`
+
 ```java
 package fr.epf.restaurant.exception;
 
@@ -299,6 +315,7 @@ public class ResourceNotFoundException extends AppException {
 ```
 
 ### `exception/StockInsuffisantException.java`
+
 ```java
 package fr.epf.restaurant.exception;
 
@@ -310,6 +327,7 @@ public class StockInsuffisantException extends AppException {
 ```
 
 ### `exception/StatutInvalideException.java`
+
 ```java
 package fr.epf.restaurant.exception;
 
@@ -324,7 +342,7 @@ public class StatutInvalideException extends AppException {
 
 ## Étape 4 – GlobalExceptionHandler
 
-Intercepte toutes les `AppException` lancées par les services et les convertit en JSON.  
+Intercepte toutes les `AppException` lancées par les services et les convertit en JSON.
 À placer dans `controller/GlobalExceptionHandler.java`.
 
 ```java
@@ -358,6 +376,7 @@ public class GlobalExceptionHandler {
 Package `dao/`. Chaque DAO est annoté `@Repository` et reçoit `JdbcTemplate` par injection de constructeur.
 
 **Squelette commun :**
+
 ```java
 @Repository
 public class XxxDao {
@@ -422,15 +441,15 @@ public class ClientDao {
 
 Méthodes à implémenter :
 
-| Méthode | SQL |
-|---|---|
-| `findAll()` | `SELECT * FROM INGREDIENT` |
-| `findById(Long id)` | `SELECT * FROM INGREDIENT WHERE id = ?` |
-| `findSousAlerte()` | `SELECT * FROM INGREDIENT WHERE stock_actuel < seuil_alerte` |
-| `decrementerStock(Long id, double qte)` | `UPDATE INGREDIENT SET stock_actuel = stock_actuel - ? WHERE id = ?` |
-| `incrementerStock(Long id, double qte)` | `UPDATE INGREDIENT SET stock_actuel = stock_actuel + ? WHERE id = ?` |
-| `findPrixParFournisseur(Long id)` | `SELECT fi.fournisseur_id, f.nom, fi.prix_unitaire FROM FOURNISSEUR_INGREDIENT fi JOIN FOURNISSEUR f ON f.id = fi.fournisseur_id WHERE fi.ingredient_id = ?` |
-| `findFournisseurLeMoinsCher(Long id)` | `SELECT fi.fournisseur_id, f.nom, fi.prix_unitaire FROM FOURNISSEUR_INGREDIENT fi JOIN FOURNISSEUR f ON f.id = fi.fournisseur_id WHERE fi.ingredient_id = ? ORDER BY fi.prix_unitaire ASC LIMIT 1` |
+| Méthode                                  | SQL                                                                                                                                                                                                  |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `findAll()`                             | `SELECT * FROM INGREDIENT`                                                                                                                                                                         |
+| `findById(Long id)`                     | `SELECT * FROM INGREDIENT WHERE id = ?`                                                                                                                                                            |
+| `findSousAlerte()`                      | `SELECT * FROM INGREDIENT WHERE stock_actuel < seuil_alerte`                                                                                                                                       |
+| `decrementerStock(Long id, double qte)` | `UPDATE INGREDIENT SET stock_actuel = stock_actuel - ? WHERE id = ?`                                                                                                                               |
+| `incrementerStock(Long id, double qte)` | `UPDATE INGREDIENT SET stock_actuel = stock_actuel + ? WHERE id = ?`                                                                                                                               |
+| `findPrixParFournisseur(Long id)`       | `SELECT fi.fournisseur_id, f.nom, fi.prix_unitaire FROM FOURNISSEUR_INGREDIENT fi JOIN FOURNISSEUR f ON f.id = fi.fournisseur_id WHERE fi.ingredient_id = ?`                                       |
+| `findFournisseurLeMoinsCher(Long id)`   | `SELECT fi.fournisseur_id, f.nom, fi.prix_unitaire FROM FOURNISSEUR_INGREDIENT fi JOIN FOURNISSEUR f ON f.id = fi.fournisseur_id WHERE fi.ingredient_id = ? ORDER BY fi.prix_unitaire ASC LIMIT 1` |
 
 > **Attention** pour `findSousAlerte()` : la condition est `stock_actuel < seuil_alerte` (strictement inférieur — exactement au seuil = pas en alerte).
 
@@ -440,14 +459,15 @@ Méthodes à implémenter :
 
 Méthodes à implémenter :
 
-| Méthode | SQL |
-|---|---|
-| `findAll()` | `SELECT * FROM PLAT` |
-| `findById(Long id)` | `SELECT * FROM PLAT WHERE id = ?` |
+| Méthode                         | SQL                                                       |
+| -------------------------------- | --------------------------------------------------------- |
+| `findAll()`                    | `SELECT * FROM PLAT`                                    |
+| `findById(Long id)`            | `SELECT * FROM PLAT WHERE id = ?`                       |
 | `findWithIngredients(Long id)` | Requête sur PLAT + jointure PLAT_INGREDIENT + INGREDIENT |
-| `save(Plat plat)` | `INSERT INTO PLAT` |
+| `save(Plat plat)`              | `INSERT INTO PLAT`                                      |
 
 > Pour `findWithIngredients` : récupère d'abord le plat avec `findById`, puis charge ses ingrédients avec :
+>
 > ```sql
 > SELECT pi.quantite_requise, i.*
 > FROM PLAT_INGREDIENT pi
@@ -461,11 +481,11 @@ Méthodes à implémenter :
 
 Méthodes à implémenter :
 
-| Méthode | SQL |
-|---|---|
-| `findAll()` | `SELECT * FROM FOURNISSEUR` |
-| `findById(Long id)` | `SELECT * FROM FOURNISSEUR WHERE id = ?` |
-| `save(Fournisseur f)` | `INSERT INTO FOURNISSEUR` |
+| Méthode                   | SQL                                                                             |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| `findAll()`              | `SELECT * FROM FOURNISSEUR`                                                   |
+| `findById(Long id)`      | `SELECT * FROM FOURNISSEUR WHERE id = ?`                                      |
+| `save(Fournisseur f)`    | `INSERT INTO FOURNISSEUR`                                                     |
 | `findCatalogue(Long id)` | Jointure `FOURNISSEUR_INGREDIENT` + `INGREDIENT` où `fournisseur_id = ?` |
 
 > Pour `findCatalogue`, retourne une liste de Maps ou une classe interne avec : `ingredientId`, `ingredientNom`, `ingredientUnite`, `prixUnitaire`.
@@ -478,14 +498,14 @@ C'est le DAO le plus complexe car une commande contient des lignes.
 
 Méthodes à implémenter :
 
-| Méthode | Description |
-|---|---|
-| `findAll(String statut)` | Liste toutes les commandes, filtre par statut si non null |
-| `findById(Long id)` | Commande + ses lignes (avec plat) |
-| `save(Long clientId)` | INSERT dans COMMANDE_CLIENT, retourne l'id généré |
-| `addLigne(Long commandeId, Long platId, int quantite)` | INSERT dans LIGNE_COMMANDE_CLIENT |
-| `updateStatut(Long id, String statut)` | UPDATE COMMANDE_CLIENT SET statut = ? WHERE id = ? |
-| `delete(Long id)` | DELETE les lignes puis la commande |
+| Méthode                                                 | Description                                               |
+| -------------------------------------------------------- | --------------------------------------------------------- |
+| `findAll(String statut)`                               | Liste toutes les commandes, filtre par statut si non null |
+| `findById(Long id)`                                    | Commande + ses lignes (avec plat)                         |
+| `save(Long clientId)`                                  | INSERT dans COMMANDE_CLIENT, retourne l'id généré      |
+| `addLigne(Long commandeId, Long platId, int quantite)` | INSERT dans LIGNE_COMMANDE_CLIENT                         |
+| `updateStatut(Long id, String statut)`                 | UPDATE COMMANDE_CLIENT SET statut = ? WHERE id = ?        |
+| `delete(Long id)`                                      | DELETE les lignes puis la commande                        |
 
 **Astuce pour `findById` :** charger les lignes séparément avec la méthode `findLignesByCommandeId`.
 
@@ -536,14 +556,14 @@ private List<LigneCommandeClient> findLignesByCommandeId(Long commandeId) {
 
 Même structure que `CommandeClientDao` mais pour les commandes fournisseur :
 
-| Méthode | Description |
-|---|---|
-| `findAll(String statut)` | Liste avec filtre statut optionnel |
-| `findById(Long id)` | Commande + lignes (avec ingredient) |
-| `save(Long fournisseurId)` | INSERT COMMANDE_FOURNISSEUR |
-| `addLigne(Long commandeId, Long ingredientId, double quantite, double prixUnitaire)` | INSERT LIGNE_COMMANDE_FOURNISSEUR |
-| `updateStatut(Long id, String statut)` | UPDATE statut |
-| `delete(Long id)` | DELETE lignes puis commande |
+| Méthode                                                                               | Description                         |
+| -------------------------------------------------------------------------------------- | ----------------------------------- |
+| `findAll(String statut)`                                                             | Liste avec filtre statut optionnel  |
+| `findById(Long id)`                                                                  | Commande + lignes (avec ingredient) |
+| `save(Long fournisseurId)`                                                           | INSERT COMMANDE_FOURNISSEUR         |
+| `addLigne(Long commandeId, Long ingredientId, double quantite, double prixUnitaire)` | INSERT LIGNE_COMMANDE_FOURNISSEUR   |
+| `updateStatut(Long id, String statut)`                                               | UPDATE statut                       |
+| `delete(Long id)`                                                                    | DELETE lignes puis commande         |
 
 ---
 
