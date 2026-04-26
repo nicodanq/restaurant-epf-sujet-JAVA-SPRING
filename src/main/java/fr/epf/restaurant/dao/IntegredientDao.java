@@ -25,6 +25,8 @@ public class IntegredientDao {
         + " FROM FOURNISSEUR_INGREDIENT fi"
         + " JOIN FOURNISSEUR f ON f.id = fi.fournisseur_id"
         + " WHERE fi.ingredient_id = ? ORDER BY fi.prix_unitaire ASC LIMIT 1";
+    private static final String DECREMENTER_STOCK_QUERY =
+        "UPDATE INGREDIENT SET stock_actuel = stock_actuel - ? WHERE id = ?";
     private static final String FIND_PRIX_PAR_FOURNISSEUR_QUERY =
         "SELECT fi.fournisseur_id AS fournisseurId, f.nom AS fournisseurNom,"
         + " fi.prix_unitaire AS prixUnitaire"
@@ -66,6 +68,10 @@ public class IntegredientDao {
                 "prixUnitaire", rs.getDouble("prixUnitaire")
             ), id);
         return results.stream().findFirst();
+    }
+
+    public void decrementerStock(Long id, double qte) {
+        jdbc.update(DECREMENTER_STOCK_QUERY, qte, id);
     }
 
     public List<Map<String, Object>> findPrixParFournisseur(Long id) {

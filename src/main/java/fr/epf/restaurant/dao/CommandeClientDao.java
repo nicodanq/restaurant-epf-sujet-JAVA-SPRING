@@ -2,6 +2,8 @@ package fr.epf.restaurant.dao;
 
 import fr.epf.restaurant.model.Client;
 import fr.epf.restaurant.model.CommandeClient;
+import fr.epf.restaurant.model.LigneCommandeClient;
+import fr.epf.restaurant.model.Plat;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -25,6 +27,12 @@ public class CommandeClientDao {
         + "c.id AS client_id, c.nom, c.prenom, c.email, c.telephone "
         + "FROM COMMANDE_CLIENT cc JOIN CLIENT c ON c.id = cc.client_id"
         + " WHERE cc.id = ?";
+    private static final String UPDATE_STATUT_QUERY =
+        "UPDATE COMMANDE_CLIENT SET statut = ? WHERE id = ?";
+    private static final String FIND_LIGNES_QUERY =
+        "SELECT lcc.id, lcc.quantite, p.id AS plat_id, p.nom, p.description, p.prix"
+        + " FROM LIGNE_COMMANDE_CLIENT lcc JOIN PLAT p ON p.id = lcc.plat_id"
+        + " WHERE lcc.commande_client_id = ?";
     private static final String FIND_ALL_QUERY =
         "SELECT cc.id AS commande_id, cc.date_commande, cc.statut, "
         + "c.id AS client_id, c.nom, c.prenom, c.email, c.telephone "
@@ -67,10 +75,24 @@ public class CommandeClientDao {
             ps.setLong(1, clientId);
             return ps;
         }, kh);
-        return kh.getKey().longValue();
+        return ((Number) kh.getKeys().get("ID")).longValue();
     }
 
     public void addLigne(Long commandeId, Long platId, int quantite) {
         jdbc.update(ADD_LIGNE_QUERY, commandeId, platId, quantite);
+    }
+
+    public void updateStatut(Long id, String statut) {
+        jdbc.update(UPDATE_STATUT_QUERY, statut, id);
+    }
+
+    public List<LigneCommandeClient> findLignesByCommandeId(Long commandeId) {
+        return jdbc.query(FIND_LIGNES_QUERY,
+            (rs, rowNum) -> new LigneCommandeClient(
+                rs.getLong("id"),
+                new Plat(rs.getLong("plat_id"), rs.getString("nom"),
+                    rs.getString("description"), rs.getDouble("prix")),
+                rs.getInt("quantite")
+            ), commandeId);
     }
 }
