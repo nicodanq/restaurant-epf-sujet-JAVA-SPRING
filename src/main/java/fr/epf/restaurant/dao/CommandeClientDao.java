@@ -41,6 +41,11 @@ public class CommandeClientDao {
         "SELECT cc.id AS commande_id, cc.date_commande, cc.statut, "
         + "c.id AS client_id, c.nom, c.prenom, c.email, c.telephone "
         + "FROM COMMANDE_CLIENT cc JOIN CLIENT c ON c.id = cc.client_id";
+    private static final String FIND_BY_STATUT_QUERY =
+        "SELECT cc.id AS commande_id, cc.date_commande, cc.statut, "
+        + "c.id AS client_id, c.nom, c.prenom, c.email, c.telephone "
+        + "FROM COMMANDE_CLIENT cc JOIN CLIENT c ON c.id = cc.client_id"
+        + " WHERE cc.statut = ?";
     private final JdbcTemplate jdbc;
 
     public CommandeClientDao(JdbcTemplate jdbc) {
@@ -65,6 +70,10 @@ public class CommandeClientDao {
 
     public List<CommandeClient> findAll() {
         return jdbc.query(FIND_ALL_QUERY, commandeClientMapper);
+    }
+
+    public List<CommandeClient> findByStatut(String statut) {
+        return jdbc.query(FIND_BY_STATUT_QUERY, commandeClientMapper, statut);
     }
 
     public CommandeClient findById(Long id) {
