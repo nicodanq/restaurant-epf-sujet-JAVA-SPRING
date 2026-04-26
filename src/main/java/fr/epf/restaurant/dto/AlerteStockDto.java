@@ -7,7 +7,8 @@ public class AlerteStockDto {
     private double seuilAlerte;
     private double quantiteACommander;
 
-    public AlerteStockDto(long ingredientId, String ingredientNom, double stockActuel, double seuilAlerte, double quantiteACommander) {
+    public AlerteStockDto(long ingredientId, String ingredientNom,
+            double stockActuel, double seuilAlerte, double quantiteACommander) {
         this.ingredientId = ingredientId;
         this.ingredientNom = ingredientNom;
         this.stockActuel = stockActuel;
