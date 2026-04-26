@@ -13,6 +13,8 @@ public class FournisseurDao {
 
     private static final String FIND_ALL_QUERY =
         "SELECT id, nom, contact, email FROM FOURNISSEUR";
+    private static final String FIND_BY_ID_QUERY =
+        "SELECT id, nom, contact, email FROM FOURNISSEUR WHERE id = ?";
     private static final String CREATE_QUERY =
         "INSERT INTO FOURNISSEUR (nom, contact, email) VALUES (?, ?, ?)";
     private static final String FIND_CATALOGUE_QUERY =
@@ -36,6 +38,10 @@ public class FournisseurDao {
 
     public List<Fournisseur> findAll() {
         return jdbc.query(FIND_ALL_QUERY, fournisseurMapper);
+    }
+
+    public Fournisseur findById(Long id) {
+        return jdbc.queryForObject(FIND_BY_ID_QUERY, fournisseurMapper, id);
     }
 
     public void create(Fournisseur fournisseur) {

@@ -27,6 +27,8 @@ public class IntegredientDao {
         + " WHERE fi.ingredient_id = ? ORDER BY fi.prix_unitaire ASC LIMIT 1";
     private static final String DECREMENTER_STOCK_QUERY =
         "UPDATE INGREDIENT SET stock_actuel = stock_actuel - ? WHERE id = ?";
+    private static final String INCREMENTER_STOCK_QUERY =
+        "UPDATE INGREDIENT SET stock_actuel = stock_actuel + ? WHERE id = ?";
     private static final String FIND_PRIX_PAR_FOURNISSEUR_QUERY =
         "SELECT fi.fournisseur_id AS fournisseurId, f.nom AS fournisseurNom,"
         + " fi.prix_unitaire AS prixUnitaire"
@@ -72,6 +74,10 @@ public class IntegredientDao {
 
     public void decrementerStock(Long id, double qte) {
         jdbc.update(DECREMENTER_STOCK_QUERY, qte, id);
+    }
+
+    public void incrementerStock(Long id, double qte) {
+        jdbc.update(INCREMENTER_STOCK_QUERY, qte, id);
     }
 
     public List<Map<String, Object>> findPrixParFournisseur(Long id) {
