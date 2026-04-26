@@ -12,6 +12,8 @@ public class PlatDao {
 
     private static final String FIND_ALL_QUERY =
         "SELECT id, nom, description, prix FROM PLAT";
+    private static final String FIND_BY_ID_QUERY =
+        "SELECT id, nom, description, prix FROM PLAT WHERE id = ?";
 
     private final JdbcTemplate jdbc;
 
@@ -28,5 +30,9 @@ public class PlatDao {
 
     public List<Plat> findAll() {
         return jdbc.query(FIND_ALL_QUERY, platMapper);
+    }
+
+    public Plat findById(Long id) {
+        return jdbc.queryForObject(FIND_BY_ID_QUERY, platMapper, id);
     }
 }
