@@ -89,4 +89,16 @@ public class CommandeClientService {
         CommandeClient commandeMaj = commandeClientDao.findById(id);
         return new PreparationResultDto(commandeMaj, stockService.getAlertes());
     }
+
+    public CommandeClient servir(Long id) {
+        CommandeClient commande = commandeClientDao.findById(id);
+        if (commande == null) {
+            throw new ResourceNotFoundException("Commande introuvable : " + id);
+        }
+        if (!"EN_PREPARATION".equals(commande.getStatut())) {
+            throw new StatutInvalideException("La commande doit être EN_PREPARATION pour être servie");
+        }
+        commandeClientDao.updateStatut(id, "SERVIE");
+        return commandeClientDao.findById(id);
+    }
 }
