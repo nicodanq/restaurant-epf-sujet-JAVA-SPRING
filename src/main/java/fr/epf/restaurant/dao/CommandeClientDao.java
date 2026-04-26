@@ -37,7 +37,6 @@ public class CommandeClientDao {
         "SELECT cc.id AS commande_id, cc.date_commande, cc.statut, "
         + "c.id AS client_id, c.nom, c.prenom, c.email, c.telephone "
         + "FROM COMMANDE_CLIENT cc JOIN CLIENT c ON c.id = cc.client_id";
-
     private final JdbcTemplate jdbc;
 
     public CommandeClientDao(JdbcTemplate jdbc) {
@@ -95,4 +94,5 @@ public class CommandeClientDao {
                 rs.getInt("quantite")
             ), commandeId);
     }
+
 }
